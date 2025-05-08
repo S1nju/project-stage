@@ -3,7 +3,6 @@
 import React, { useState } from "react"
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { posix } from "path";
 type Meetingroom = {
   name: string,
   available: boolean,
@@ -28,8 +27,17 @@ function Reserveshapes() {
   const [pos,setpos]=useState({x:0,y:0,id:-1})
   const [editMode,setEditMode]=useState<boolean>(false)
   useGSAP(()=>{
+    selected.isseleced &&
+    gsap.to(".img",{
+        duration:0.5,
+        rotateY:30,
+        rotateX:60,
+        rotateZ:-3,
+        ease:"back.inOut"
+
+
+    })
 gsap.to(".selected",{
-duration:0.1,
 zIndex:500,
 })
 gsap.to(".notselecteddown",{
@@ -44,6 +52,20 @@ gsap.to(".notselecteddown",{
         opacity:0,
         duration:0.5
         })
+        gsap.to(".up",{
+            yPercent:-50,
+            duration:0.5,
+            ease:"power4.in"
+        
+            })
+            gsap.to(".down",{
+                yPercent:50,
+                duration:0.5,
+   ease:"power4.in"
+            
+    
+                })
+
   },[selected])
   const svgobj=(<></>)
   const [etages,setetages] = useState<Etage[]>([
@@ -108,40 +130,23 @@ gsap.to(".notselecteddown",{
         },
       ],
       svg: svgobj
-    },
-    {id:4,
-      name: "E5",
-      meetingrooms: [
-        {
-          name: "m1",
-          available: true,
-          postop: 50,
-          posbot: 150
-        },
-        {
-          name: "m2",
-          available: false,
-          postop: 50,
-          posbot: 150
-        },
-      ],
-      svg: svgobj
-    },
+    }
+
   ])
 
 
   return (
     <div>
-    <div className=" flex flex-col  w-full h-full" >
+    <div className=" flex flex-col   w-full h-full" >
       {etages.map((item, index) => (
         <div 
           key={index} 
-          className={ ((selected.isseleced)? selected.id===index? basestyle+selectedstyle: (selected.id>index&&selected.id>=0)? basestyle+nonselectedstyleup:basestyle+nonselectedstyledown:basestyle)}
+          className={ ((selected.isseleced)? selected.id===index? basestyle+selectedstyle+(index>2 ?" up":index!==2?" down":""): (selected.id>index&&selected.id>=0)? basestyle+nonselectedstyleup:basestyle+nonselectedstyledown:basestyle)}
           style={{ top: `${index * 100}px`, zIndex:selected.id===index?"":-index }} 
           onClick={()=>{
             setselected({id:index,isseleced:true})}}
         >
-          <div className="flex items-center">
+          <div className="flex  items-center">
             <p className="text-lg font-bold w-8 m-15">{item.name}</p>
             <div className="relative">
             <img 
@@ -175,7 +180,7 @@ return prev
 
  })}
     }}
-      className="w-full max-w-md bg-white rotate-x-70 -rotate-y-10 rotate-z-50 shadow-xl/30 "
+      className="w-full max-w-md img bg-white rotate-x-70 -rotate-y-10 rotate-z-50 shadow-xl/30"
     />
               {item.meetingrooms.map((room, idx) => (
                 <React.Fragment key={idx}>
