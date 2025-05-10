@@ -2,7 +2,6 @@
 import React, { useState,useEffect } from "react"
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -14,9 +13,22 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { Dialog,DialogTrigger, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Input } from "./ui/input";
 
 type Meetingroom = {
   name: string,
@@ -41,7 +53,11 @@ function Reserveshapes() {
   const [selected,setselected]= useState({id:-1,isseleced:false})
   const [editMode,setEditMode]=useState<boolean>(false)
   const [boxesReady, setBoxesReady] = useState(false);
-
+  const [draweropen, setdraweropen] = useState(false);
+  const [SaleName, setSaleName] = useState("");
+  const [saleValue, setSalevalue] = useState("");
+  const [salex, setSaleX] = useState(0);
+  const [saley,setSaleY ] = useState(0);
   useEffect(() => {
     gsap.fromTo(".etages",{
       yPercent:200,
@@ -61,19 +77,45 @@ function Reserveshapes() {
   useGSAP(()=>{
 
     if(selected.isseleced){
-    gsap.to(".img",{
-        duration:0.5,
-        rotateY:30,
-        rotateX:60,
-        rotateZ:-3,
-        ease:"power4.out"
 
 
-    })
-gsap.to(".selected",{
-zIndex:500,
+    gsap.to(".up",{
+      yPercent:-50,
+      duration:0.5,
+      onStart:()=>{
+        gsap.to(".img",{
+          duration:0.5,
+          rotateY:30,
+          rotateX:60,
+          rotateZ:-3,
+          ease:"power4.out"
+
+
+      })
+
+      },
+      ease:"power4.out"
+
+      })
+      gsap.to(".down",{
+          yPercent:50,
+          duration:0.5,
+ease:"power4.out",
+onStart:()=>{
+  gsap.to(".img",{
+    duration:0.5,
+    rotateY:30,
+    rotateX:60,
+    rotateZ:-3,
+    ease:"power4.out"
+
+
 })
 
+},
+
+
+          })
 gsap.to(".selected",{
     zIndex:500,
     })
@@ -102,19 +144,7 @@ gsap.to(".notselecteddown",{
         'webkitFilter': 'blur(25px)',
         duration:0.2
         })
-        gsap.to(".up",{
-            yPercent:-50,
-            duration:0.5,
-            ease:"power4.out"
 
-            })
-            gsap.to(".down",{
-                yPercent:50,
-                duration:0.5,
-   ease:"power4.out"
-
-
-                })
 
 
 
@@ -384,6 +414,7 @@ gsap.to(".notselecteddown",{
                     alt='floor plan'
                     style={{
                         border: "1px solid black",
+                        borderRadius:"25px",
                         width: "350px", // Fixed size to prevent scaling
                         height: "250px",
                         cursor: editMode ? "pointer" : "",
@@ -396,22 +427,10 @@ gsap.to(".notselecteddown",{
 
                             const x = e.clientX - parent.left - 48;
                             const y = e.clientY - parent.top + 25;
-
-
-                            setetages(prev => {
-                           const indexInOrignalArray=Showedetages[nextitems][index].id;
-                                prev.at(indexInOrignalArray)?.meetingrooms.push({
-                                    name: "" + item.meetingrooms.length + 1,
-                                    available: true,
-                                    posbot: x,
-                                    postop: y,
-                                });
-
-                                return prev;
-
-
-                            });
-
+                            setSaleX(x);
+                            setSaleY(y);
+                            setEditMode(false)
+                            setdraweropen(true)
                         }
                     } }
                     className="w-full max-w-md img bg-white rotate-x-70 -rotate-y-10 rotate-z-50 shadow-xl/30" />
@@ -469,9 +488,9 @@ gsap.to(".notselecteddown",{
 
         </React.Fragment> ))}
 
-        {((nextitems!=Showedetages.length-1)&&!selected.isseleced)&&    <div className=" absolute translate-y-[100%] opacity-65">
+        {((nextitems!=Showedetages.length-1)&&!selected.isseleced)&&<div className=" absolute translate-y-[200%] opacity-65">
 {Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>1? ""
-:EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>}
+:indexnext==1?"":EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>}
 <div className="absolute top-5 left-0 mb-4 flex flex-col gap-2">
 { (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),1300)
 
@@ -646,14 +665,59 @@ if(!boxesReady)return;
                   {item.name}
                 </h2>
                 <Badge variant={!item.available?"destructive":"outline"} className={item.available?"bg-[#22bb33]":""}>
-                {item.available?"available":"not avaialable"}</Badge>
+                {item.available?"Libre":"Occupé"}</Badge>
 
                 </div>
 
 
 
               ))}
-              <Button>Ajouter une Sale des réunion</Button>
+
+<Dialog open={draweropen}  >
+  <DialogTrigger asChild ><button className="bg-black text-white p-3 rounded-2xl">Ajouter une Sale des réunion</button></DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Ajouter une Sale des réunion</DialogTitle>
+    </DialogHeader>
+
+  <Input onChange={e=>setSaleName(e.target.value)} value={SaleName} type="text" placeholder="Nom du sale"></Input>
+  <Select onValueChange={e=>setSalevalue(e)} value={saleValue}>
+        <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Status du sale" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Status du sale</SelectLabel>
+          <SelectItem value={"true"}>Libre</SelectItem>
+          <SelectItem value={"false"}>Occupé</SelectItem>
+
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <Button onClick={()=>{
+      setdraweropen(false)
+setetages(prev => {
+  const indexInOrignalArray=Showedetages[nextitems][selected.id].id;
+
+       prev.at(indexInOrignalArray)?.meetingrooms.push({
+           name:SaleName,
+           available: saleValue==="true"?true:false,
+           posbot: salex,
+           postop: saley,
+       });
+
+       return prev;
+
+
+   });
+
+setSaleName("");
+setSalevalue("");
+
+    }}>Ajouter Une Salle</Button>
+  </DialogContent>
+</Dialog>
+
                 </div>
             </SidebarMenu>
           </SidebarGroupContent>:"veuillez sélectionner un etage"}
