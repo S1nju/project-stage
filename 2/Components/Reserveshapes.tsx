@@ -16,6 +16,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 
 type Meetingroom = {
   name: string,
@@ -471,13 +472,17 @@ gsap.to(".notselecteddown",{
         <Sidebar variant="sidebar"  side="right">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="font-bold text-2xl mb-8">{etages[selected.id]?.name}</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-bold text-2xl mb-8">Etage : {Showedetages[nextitems][selected.id]?.name}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
             <div className="flex flex-col gap-2 p-3">
-              {etages[selected.id]?.meetingrooms.map((item,index) => (
-                <div className="flex justify-between" key={index}>
-                <h2>
+            <h2 className="font-bold text-xl mb-5">
+            Sales des réunion:
+                </h2>
+
+              {Showedetages[nextitems][selected.id]?.meetingrooms.map((item,index) => (
+                <div className="flex justify-between mb-4" key={index}>
+                <h2 className="font-bold">
                   {item.name}
                 </h2>
 <Badge variant={!item.available?"destructive":"outline"} className={item.available?"bg-[#22bb33]":""}>
@@ -488,6 +493,7 @@ gsap.to(".notselecteddown",{
 
 
               ))}
+              <Button>Add a new meeting room</Button>
                 </div>
             </SidebarMenu>
           </SidebarGroupContent>
