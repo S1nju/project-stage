@@ -2,6 +2,21 @@
 import React, { useState,useEffect } from "react"
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { Badge } from "./ui/badge";
+
 type Meetingroom = {
   name: string,
   available: boolean,
@@ -443,6 +458,8 @@ gsap.to(".notselecteddown",{
 
         </div>
     </div>);
+
+
   return (
     <div>
     <div className=" flex flex-col items-center justify-center overflow-hidden etages opacity-0 w-full h-full" >
@@ -450,10 +467,37 @@ gsap.to(".notselecteddown",{
 { EtageComp(item,index," absolute transition-transform duration-300 hover:translate-y-[-10px] upper ") }
 
         </React.Fragment> ))}
+<SidebarProvider open={selected.isseleced} >
+        <Sidebar variant="sidebar"  side="right">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="font-bold text-2xl mb-8">{etages[selected.id]?.name}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+            <div className="flex flex-col gap-2 p-3">
+              {etages[selected.id]?.meetingrooms.map((item,index) => (
+                <div className="flex justify-between" key={index}>
+                <h2>
+                  {item.name}
+                </h2>
+<Badge variant={!item.available?"destructive":"outline"} className={item.available?"bg-[#22bb33]":""}>
+                {item.available?"available":"not avaialable"}</Badge>
+
+                </div>
+
+
+
+              ))}
+                </div>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar></SidebarProvider>
         <div className="translate-y-[65%] opacity-75">
 {Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>2? ""
 :EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
-<div className="absolute top-5 right-0 mb-4 flex flex-col gap-2">
+<div className="absolute top-5 left-0 mb-4 flex flex-col gap-2">
 { (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),2000)
 
 const next = gsap.utils.toArray(".nexto");
@@ -461,18 +505,19 @@ const upper = gsap.utils.toArray(".upper")
 if(!boxesReady)return;
  gsap.to(upper,{
      yPercent:-65,
-     duration:1,
+     duration:0.4,
      stagger:0.3,
      opacity:0,
      onComplete:()=>{
          gsap.fromTo(upper,{
              yPercent:200,
-
+             duration:0.4,
              'webkitFilter': 'blur(25px)',
              opacity:0,
 
          },{
              yPercent:0,
+             duration:0.4,
              'webkitFilter': 'blur(0px)',
              opacity:1,
              onComplete:()=>{    gsap.set(upper, {translate:""});}
@@ -545,14 +590,14 @@ gsap.to(".etages",{
 
  </button></>)}
 
-    { ((nextitems!=Showedetages.length-1)&&!selected.isseleced)&& <button onClick={()=>{setTimeout(()=>setnextitems(prev=>prev+1),2000)
+    { ((nextitems!=Showedetages.length-1)&&!selected.isseleced)&& <button onClick={()=>{setTimeout(()=>setnextitems(prev=>prev+1),1300)
 
    const next = gsap.utils.toArray(".nexto");
    const upper = gsap.utils.toArray(".upper")
 if(!boxesReady)return;
     gsap.to(upper,{
         yPercent:-65,
-        duration:1,
+        duration:0.4,
         stagger:0.3,
         opacity:0,
         onComplete:()=>{
@@ -560,10 +605,12 @@ if(!boxesReady)return;
                 yPercent:200,
                 'webkitFilter': 'blur(25px)',
                  opacity:0,
+                 duration:0.4
 
             },{
                 yPercent:0,
                 'webkitFilter': 'blur(0px)',
+                duration:0.4,
                 opacity:1,
                 onComplete:()=>{    gsap.set(upper, {translate:""});}
             })
@@ -582,7 +629,7 @@ if(!boxesReady)return;
         },{
 
             'webkitFilter': 'blur(20px)',
-            delay:1,
+            delay:0.7,
             scale:1.1,
             opacity:1,
 
