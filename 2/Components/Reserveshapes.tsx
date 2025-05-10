@@ -469,11 +469,11 @@ gsap.to(".notselecteddown",{
 
         </React.Fragment> ))}
 
-        <div className=" absolute translate-y-[100%] opacity-75">
+        {((nextitems!=Showedetages.length-1)&&!selected.isseleced)&&    <div className=" absolute translate-y-[100%] opacity-65">
 {Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>1? ""
-:EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
+:EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>}
 <div className="absolute top-5 left-0 mb-4 flex flex-col gap-2">
-{ (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),2000)
+{ (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),1300)
 
 const next = gsap.utils.toArray(".nexto");
 const upper = gsap.utils.toArray(".upper")
