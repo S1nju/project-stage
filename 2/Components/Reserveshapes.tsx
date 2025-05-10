@@ -462,46 +462,15 @@ gsap.to(".notselecteddown",{
 
 
   return (
-    <div>
-    <div className=" flex flex-col items-center justify-center overflow-hidden etages opacity-0 w-full h-full" >
+    <div className="flex">
+    <div className=" flex flex-col items-center  overflow-hidden etages opacity-0 w-full h-[100vh]" >
       {Showedetages[nextitems].map((item, index) => (<React.Fragment    key={index} >
 { EtageComp(item,index," absolute transition-transform duration-300 hover:translate-y-[-10px] upper ") }
 
         </React.Fragment> ))}
-<SidebarProvider open={selected.isseleced} >
-        <Sidebar variant="sidebar"  side="right">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="font-bold text-2xl mb-8">Etage : {Showedetages[nextitems][selected.id]?.name}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-            <div className="flex flex-col gap-2 p-3">
-            <h2 className="font-bold text-xl mb-5">
-            Sales des réunion:
-                </h2>
 
-              {Showedetages[nextitems][selected.id]?.meetingrooms.map((item,index) => (
-                <div className="flex justify-between mb-4" key={index}>
-                <h2 className="font-bold">
-                  {item.name}
-                </h2>
-<Badge variant={!item.available?"destructive":"outline"} className={item.available?"bg-[#22bb33]":""}>
-                {item.available?"available":"not avaialable"}</Badge>
-
-                </div>
-
-
-
-              ))}
-              <Button>Add a new meeting room</Button>
-                </div>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar></SidebarProvider>
-        <div className="translate-y-[65%] opacity-75">
-{Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>2? ""
+        <div className=" absolute translate-y-[100%] opacity-75">
+{Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>1? ""
 :EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
 <div className="absolute top-5 left-0 mb-4 flex flex-col gap-2">
 { (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),2000)
@@ -653,6 +622,44 @@ if(!boxesReady)return;
 </div>
 
     </div>
+
+
+    <SidebarProvider   style={{
+    "--sidebar-width": "40%",
+    "--sidebar-width-mobile": "20rem",
+
+  }}  >
+        <Sidebar  variant="floating"  side="right">
+      <SidebarContent>
+        <SidebarGroup className="text-center font-bold">
+        <SidebarGroupLabel className="font-bold text-2xl mb-8">Etage : {Showedetages[nextitems][selected.id]?.name}</SidebarGroupLabel>
+        {selected.isseleced?   <SidebarGroupContent>
+            <SidebarMenu>
+            <div className="flex flex-col gap-2 p-3">
+            <h2 className="font-bold text-xl text-start mb-5">
+            Sales des réunion:
+                </h2>
+
+              {Showedetages[nextitems][selected.id]?.meetingrooms.map((item,index) => (
+                <div className="flex justify-between mb-4" key={index}>
+                <h2 className="font-bold">
+                  {item.name}
+                </h2>
+                <Badge variant={!item.available?"destructive":"outline"} className={item.available?"bg-[#22bb33]":""}>
+                {item.available?"available":"not avaialable"}</Badge>
+
+                </div>
+
+
+
+              ))}
+              <Button>Ajouter une Sale des réunion</Button>
+                </div>
+            </SidebarMenu>
+          </SidebarGroupContent>:"veuillez sélectionner un etage"}
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar></SidebarProvider>
     </div>
   )
 }
