@@ -340,7 +340,7 @@ gsap.to(".notselecteddown",{
 
   const Showedetages=chunkArray(etages,4);
   let zcoef=[4,3,2,1]
-    const newLocal =(item:Etage,index:number,type:string)=> (<div
+    const EtageComp =(item:Etage,index:number,type:string)=> (<div
 
         className={type==="blur-[20px] opacity-0.2 nexto "&& "blur-[20px] opacity-0.3 nexto  "||((selected.isseleced) ?
             selected.id === index ? type + selectedstyle +
@@ -449,12 +449,12 @@ gsap.to(".notselecteddown",{
     <div>
     <div className=" flex flex-col items-center justify-center overflow-hidden etages opacity-0 w-full h-full" >
       {Showedetages[nextitems].map((item, index) => (<React.Fragment    key={index} >
-{ newLocal(item,index," absolute transition-transform duration-300 hover:translate-y-[-10px] upper ") }
+{ EtageComp(item,index," absolute transition-transform duration-300 hover:translate-y-[-10px] upper ") }
 
         </React.Fragment> ))}
         <div className="translate-y-[65%] opacity-75">
 {Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>2? ""
-:newLocal(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
+:EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
 <div className="absolute bottom-0 right-0 mb-4 flex flex-col gap-2">
 { (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),2000)
 
