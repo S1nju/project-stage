@@ -439,9 +439,7 @@ gsap.to(".notselecteddown",{
                     </React.Fragment>
                 ))}
             </div>
-            <button className={selected.isseleced && selected.id === index ? "self-end p-2 rounded-lg cursor-pointer" : "hidden"} style={{ backgroundColor: editMode ? "blue" : "green" }} onClick={() => {
-                setEditMode(prev => !prev);
-            } }>ADD/EDIT</button>
+
 
         </div>
     </div>);
@@ -455,7 +453,7 @@ gsap.to(".notselecteddown",{
         <div className="translate-y-[65%] opacity-75">
 {Showedetages[nextitems].map((itemnext,indexnext)=><React.Fragment key={indexnext} >{indexnext>2? ""
 :EtageComp(itemnext,indexnext,"blur-[20px] opacity-0.2 nexto ")}</React.Fragment> )}</div>
-<div className="absolute bottom-0 right-0 mb-4 flex flex-col gap-2">
+<div className="absolute top-5 right-0 mb-4 flex flex-col gap-2">
 { (nextitems!==0&&!selected.isseleced)&& <button  onClick={()=>{setTimeout(()=>setnextitems(prev=>prev-1),2000)
 
 const next = gsap.utils.toArray(".nexto");
@@ -514,7 +512,14 @@ if(!boxesReady)return;
 
 
  </button>}
-{ selected.isseleced&& <button  onClick={()=>{
+{ selected.isseleced&& (<> <button className="cursor-pointer flex flex-col gap-2 items-center
+  justify-center text-2xl  transition-opacity duration-300 hover:bg-[#ffe2e256] p-4  "  style={{ backgroundColor: editMode ? "#ffe2e256" : "" }} onClick={() => {
+                setEditMode(prev => !prev);
+            } }><svg xmlns="http://www.w3.org/2000/svg" className="w-4" viewBox="0 0 512 512">
+              <path fill="#ffffff" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3
+               19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8
+            498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg></button>
+<button  onClick={()=>{
    if(selected.isseleced) {
 
 gsap.to(".etages",{
@@ -538,7 +543,7 @@ gsap.to(".etages",{
 
 
 
- </button>}
+ </button></>)}
 
     { ((nextitems!=Showedetages.length-1)&&!selected.isseleced)&& <button onClick={()=>{setTimeout(()=>setnextitems(prev=>prev+1),2000)
 
